@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             xmlns:vm="clr-namespace:WeatherApp.ViewModel"
+             xmlns:converters="clr-namespace:WeatherApp.Converters"
+             x:Class="WeatherApp.MainPage">
+    <ContentPage.BindingContext>
+        <vm:MainPageViewModel></vm:MainPageViewModel>
+    </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        
+        <ResourceDictionary>
+            <converters:LongTimeSpanToDateTimeConverter x:Key="LongTimeSpanToDateTime"></converters:LongTimeSpanToDateTimeConverter>
+            <Style TargetType="Button" x:Key="WeatherStyle">
+                <Setter Property="BackgroundColor" Value="Blue"></Setter>
+                <Setter Property="TextColor" Value="White"></Setter>
+                <Setter Property="CornerRadius" Value="10"></Setter>
+                <Setter Property="FontSize" Value="15"></Setter>
+                <Setter Property="FontAttributes" Value="Bold"></Setter>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <StackLayout  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        
+            <Frame HasShadow="True">
+            <StackLayout Orientation="Vertical" HorizontalOptions="Fill">
+                <Entry FontSize="30" Text="{Binding City}" Placeholder="Write your city.." Keyboard="Plain" ></Entry>
+                <Button Text="Get Weather" Command="{Binding GetWeatherCommand}" Style="{StaticResource WeatherStyle }"></Button>
+            </StackLayout>
+            </Frame>
+                        
+            <Frame HasShadow="True">
+            <StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="{Binding ActualWeather.Name,StringFormat='{0}'}"
+                       FontSize="32" 
+                       FontAttributes="Bold" VerticalTextAlignment="Center"></Label>
+                    <Image Source="{Binding ActualWeather.Image}" VerticalOptions="Center"></Image>
+                    <Label Text="{Binding ActualWeather.Sys.Country,StringFormat='{0}'}" 
+                       FontSize="Medium" 
+                       FontAttributes="Bold" VerticalTextAlignment="End"></Label>
+
+                </StackLayout>
+
+                <Label Text="{Binding ActualWeather.Main.Temp,StringFormat='Temp:{0:N} C'}"
+                       FontSize="32" 
+                       FontAttributes="Bold"></Label>
+                <Label Text="{Binding ActualWeather.Main.TempMin,StringFormat='Temp. Min:{0} C'}" 
+                       FontSize="20" 
+                       FontAttributes="Bold"></Label>
+                <Label Text="{Binding ActualWeather.Main.TempMax,StringFormat='Temp. Max:{0} C'}" 
+                       FontSize="20" 
+                       FontAttributes="Bold"></Label>
+
+                <Label Text="{Binding ActualWeather.Sys.Sunset,Converter={x:StaticResource LongTimeSpanToDateTime },StringFormat='Sunset: {0}'}" 
+                       FontSize="20" 
+                       FontAttributes="Bold"></Label>
+            <Label Text="{Binding ActualWeather.Sys.Sunrise,Converter={x:StaticResource LongTimeSpanToDateTime },StringFormat='Sunrise: {0}'}" 
+                       FontSize="20" 
+                       FontAttributes="Bold"></Label>
+                    <Label Text="{Binding ActualWeather.Main.Humidity,StringFormat='Humidity: {0} %'}" 
+                       FontSize="20" 
+                       FontAttributes="Bold"></Label>
+
+            </StackLayout>
+        </Frame>
+
+        
+            <StackLayout>
+
+            </StackLayout>
+    </StackLayout>
+
+      
+  
+
+</ContentPage>

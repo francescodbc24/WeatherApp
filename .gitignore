@@ -1,0 +1,9 @@
+### XamarinStudio ###
+bin/
+obj/
+WeatherApp/WeatherApp/appsettings.json
+WeatherApp/WeatherApp/Configuration/SettingsPrivate.cs
+WeatherApp/WeatherApp/Configuration/Configuration.cs
+WeatherApp/WeatherApp/Configuration/WeatherConfiguration.cs
+*.userprefs
+.packages
