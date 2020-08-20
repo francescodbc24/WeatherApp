@@ -14,7 +14,6 @@ namespace WeatherApp.Services
     {
         string Url = Settings.UrlApi + "weather?q=$ID&APPID=" + Settings.ApiKey; 
         string PathImg = "https://openweathermap.org/img/wn/";
-        const double Kelvin = 273.15; // Kelvin to Celcius Number-Kelvin
         public async Task<Weather> GetWeatherByName(string name = "Bologna")
         {
             try
@@ -28,9 +27,9 @@ namespace WeatherApp.Services
                     {
                         var content = await response.Content.ReadAsStringAsync();
                         var weather = JsonConvert.DeserializeObject<Weather>(content);
-                        weather.Main.Temp -= Kelvin;
-                        weather.Main.TempMax -= Kelvin;
-                        weather.Main.TempMin -= Kelvin;
+                        weather.Main.Temp = ConvertKelvinToCelcius(weather.Main.Temp);
+                        weather.Main.TempMax = ConvertKelvinToCelcius(weather.Main.TempMax);
+                        weather.Main.TempMin = ConvertKelvinToCelcius(weather.Main.TempMin);
                         foreach (var item in weather.WeatherWeather)
                         {
                             item.Icon = PathImg + item.Icon + "@4x.png";
@@ -50,5 +49,19 @@ namespace WeatherApp.Services
                 //throw;
             }
         }
+   
+        
+        public double ConvertKelvinToCelcius(double temp)
+        {
+            return temp - 273.15;
+
+        }
+        public double ConvertKelvinToFahrenheit(double temp)
+        {
+            return temp + 273.15;
+
+        }
+        
+
     }
 }

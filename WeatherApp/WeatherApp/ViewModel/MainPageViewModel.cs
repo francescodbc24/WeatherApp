@@ -10,6 +10,8 @@ using System.Windows.Input;
 using WeatherApp.Models;
 using WeatherApp.Services;
 using Xamarin.Forms;
+using Xamarin.Essentials;
+using WeatherApp.Messaging;
 
 namespace WeatherApp.ViewModel
 {
@@ -50,31 +52,33 @@ namespace WeatherApp.ViewModel
         {
             try
             {
-
+                if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+                    MessagingCenter.Send(this, nameof(SendMessage), new SendMessage() { Title = "Error", Msg = "Ops looks like you're not connected to the internet" });
                 ActualWeather = !string.IsNullOrEmpty(_city) 
                 ?  await WeatherService.GetWeatherByName(_city) 
                 : await WeatherService.GetWeatherByName();
             if(ActualWeather==null)
-                await Application.Current.MainPage.DisplayAlert("Info", "City not found","");
+                 MessagingCenter.Send(this, nameof(SendMessage), new SendMessage() { Title = "Info", Msg = "City not found." });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                MessagingCenter.Send(this, nameof(SendMessage),new SendMessage() { Title="Error",Msg=ex.Message });
             }
-            
-            
+                        
         }
-        private bool CanExecuteGetWeather(object obj)
-        {
-            return !string.IsNullOrEmpty(City);
-        }
+       
         public async void LoadWeather()
         {
-            ActualWeather=await WeatherService.GetWeatherByName();
-            //TODO Convert UTC in LocalTime
-            var Sunrise=Utilities.Utilities.UnixTimeStampToDateTime(ActualWeather.Sys.Sunrise);
-            var Sunset=Utilities.Utilities.UnixTimeStampToDateTime(ActualWeather.Sys.Sunset);
+            try
+            {
+                if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+                    MessagingCenter.Send(this, nameof(SendMessage), new SendMessage() { Title = "Error", Msg = "Ops looks like you're not connected to the internet" });
+                ActualWeather =await WeatherService.GetWeatherByName();
+            }
+            catch (Exception ex)
+            {
+                MessagingCenter.Send(this, nameof(SendMessage), new SendMessage() { Title = "Error", Msg = ex.Message });
+            }
         }
     }
 }

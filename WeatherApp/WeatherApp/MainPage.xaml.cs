@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WeatherApp.Messaging;
+using WeatherApp.ViewModel;
 using Xamarin.Forms;
 
 namespace WeatherApp
@@ -16,6 +18,10 @@ namespace WeatherApp
         public MainPage()
         {
             InitializeComponent();
+            MessagingCenter.Subscribe<MainPageViewModel,SendMessage>(this,nameof(SendMessage),async (sender,argument) =>
+            {
+               await  DisplayAlert(argument.Title, argument.Msg,"Ok");
+            });
         }
     }
 }
